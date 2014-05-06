@@ -3,30 +3,64 @@
 
 	<head>
 		{% load staticfiles %}
+		{% load template_helpers %}
 		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
 	</head>
 	<body>
 		<div class="container">
-			<div class="header">
-				{%if lastest_polls%}
-					<h2> Lastest Polls</h2>
-					<h6>Click on the title to see more details</h6>
-				{%endif%}
-			</div>
-			<div class="body">
-				{%if lastest_polls %}
-					<ul>
-						{%for poll in lastest_polls%}
-							<li>
-								<a href="{%url 'polls:detail' poll.id%}">{{poll.question}}</a>
-							</li>
-						{%endfor%}
-					</ul>
-				{%else%}
-					<p>
-						There are no polls registered.
-					</p>
-				{%endif%}
+			{%if lastest_polls%}
+				<div class="row header">
+					<div class="title col-md-12">
+						<h2> Lastest Polls</h2>
+					</div>
+				</div>
+			{%endif%}
+			<div class="row body">
+				<div class="col-md-12">
+					{%if lastest_polls %}
+						<div class="row questions_table">
+							<div class="col-md-12">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Question</th>
+											<th>Publication Date</th>
+											<th>Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{%for poll in lastest_polls%}
+											<tr id="poll_{{poll.id}}">
+												<td class="question_text">
+													{{poll.question}}
+												</td>
+												<td class="publication_date">
+													{%format_date poll.publication_date%}
+												</td>
+												<td class="actions">
+													<div class="btn-group">
+														<a href="{%url 'polls:detail' poll.id%}" class="btn btn-default"> 
+															Vote
+														</a>
+														<a href="{%url 'polls:results' poll.id%}" class="btn btn-default"> 
+															See partial results
+														</a>
+													</div>
+												</td>
+											</tr>
+										{%endfor%}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					{%else%}
+						<div class="alert alert-warning">
+							<p>
+								There are no polls registered.
+							</p>
+						</div>
+					{%endif%}
+				</div>
 			</div>	
 		</div>
 	</body>
