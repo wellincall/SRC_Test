@@ -1,4 +1,4 @@
-#H1 SRC - Django Tutorial
+# SRC - Django Tutorial
 
 Resouces used: 
 
