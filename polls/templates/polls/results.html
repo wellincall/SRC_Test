@@ -5,32 +5,20 @@
 		{% load template_helpers %}
 		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
 		<script type="text/javascript" src="{%static 'polls/javascripts/Chart.js'%}"></script>
+		<script type="text/javascript" src="{%static 'polls/javascripts/init.js'%}"></script>
 		<script type="text/javascript">
 			function drawChartAndCaption(){
-			var context = document.getElementById("myChart").getContext("2d");
-			var data = [];
-				{%for choice in poll.choice_set.all%}
-					data.push({
-						value : {{choice.votes}},
-						color : "{%random_color%}", 
-						caption : "{{choice.choice_text}}"
-					});
-				{%endfor%}
-			var myChart = new Chart(context).Pie(data);
-			addCaption(data);
-			}
-			function addCaption(paramData){
-				for(index in paramData){
-					var newRow = document.createElement("TR");
-					var captionContainer = document.createElement("TD");
-					var color = document.createElement("TD");
-					color.setAttribute("bgcolor", paramData[index].color);
-					var captionText = document.createTextNode(paramData[index].caption);
-					captionContainer.appendChild(captionText);
-					newRow.appendChild(color);
-					newRow.appendChild(captionContainer);
-					document.querySelectorAll('[class="caption_description"]')[0].appendChild(newRow);
-				}
+				var context = document.getElementById("myChart").getContext("2d");
+				var data = [];
+					{%for choice in poll.choice_set.all%}
+						data.push({
+							value : {{choice.votes}},
+							color : "{%random_color%}", 
+							caption : "{{choice.choice_text|safe}}"
+						});
+					{%endfor%}
+				var myChart = new Chart(context).Pie(data);
+				addCaption(data);
 			}
 			window.onload = function(){
 				drawChartAndCaption();
@@ -65,11 +53,6 @@
 									<h3><em>{{poll.total_votes}}</em></h3>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<a href="{%url 'polls:index'%}" class="btn btn-danger">Back to home page</a>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="row votes_results">
@@ -98,19 +81,37 @@
 							</div>
 							<div class="row graphic">
 								<div class="col-md-4">
-									<canvas id="myChart"></canvas>
+									<div class="row">
+										<div class="col-md-12">	
+											<h3>Graphic Visualization</h3>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<canvas id="myChart"></canvas>
+										</div>
+									</div>
 								</div>
-								<div class="col-md-8 ">
-									<table class="table caption_table">
-										<thead>
-											<tr>
-												<th>Color</th>
-												<th>Option</th>
-											</tr>
-										</thead>
-										<tbody class="caption_description">
-										</tbody>
-									</table>
+								<div class="col-md-8">
+									<div class="row">
+										<div class="col-md-12">
+											<h3>Legend</h3>
+										</div>
+									</div>
+									<div class="row">
+										<div class= "col-md-12">
+											<table class="table caption_table">
+												<thead>
+													<tr>
+														<th>Color</th>
+														<th>Option</th>
+													</tr>
+												</thead>
+												<tbody class="caption_description">
+												</tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="row">
