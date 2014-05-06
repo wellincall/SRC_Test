@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>{{poll.question}}</h1>
+			</div>
+
+			<div class="body">
+				{%if error_message%}
+					<div class="error_message">
+						<p>
+							<strong>
+								{{error_message}}
+							</strong>
+						</p>
+					</div>
+				{%endif%}
+				<form action="{%url 'polls:vote' poll.id%}" method="post">
+					<fieldset>
+						<legend>Options</legend>
+						{%csrf_token%}
+						{%for choice in poll.choice_set.all%}
+							<div class="polls_choice_{{forloop.counter}}">
+								<input type="radio" name="choice" id="choice_{{forloop.counter}}" value="{{choice.id}}"/>
+								<label for="choice_{{forloop.counter}}">{{choice.choice_text}}</label> 
+							</div>
+						{%endfor%}
+						<div class="form_actions">
+							<a href="{%url 'polls:index'%}">Back</a>
+							<input type="submit" value="Vote" />
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		{% load staticfiles %}
+		{% load template_helpers %}
+		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>Results for Poll #{{poll.id}}</h1>
+			</div>
+			<div class="body">
+				<div class="question_data">
+					<table class="question_table">
+						<tr>
+							<th>Question</th>
+							<td>{{poll.question}}</td>
+						</tr>
+						<tr>
+							<th>Amount of votes</th>
+							<td>{{poll.total_votes}}</td>
+						</tr>
+						<tr>
+							<td colspan="2"><a href='{%url "polls:index"%}'>Back</a></td>
+						</tr>
+					</table>
+				</div>
+				<div class="choices_data">
+					<table class="choices_table">
+						<tr>
+							<th>Option</th>
+							<th>% of votes</th>
+						</tr>
+						{%for choice in poll.choice_set.all %}
+							<tr id="choice_{{choice.id}}">
+								<td>{{choice.choice_text}}</td>
+								<td>{%percentage choice.votes poll.total_votes%}</td>
+							</tr>
+						{%endfor%}
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
