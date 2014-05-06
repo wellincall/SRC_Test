@@ -4,12 +4,22 @@
 		{% load staticfiles %}
 		{% load template_helpers %}
 		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}"/>
-		<script src="{%static 'polls/javascripts/Chart.js'%}"></script>
-		<script>
-			window.onload = function(){
-				var context = document.getElementById("myChart").getContext("2d");
-				var myNewChart = new Chart(context);
+		<script type="text/javascript" src="{%static 'polls/javascripts/Chart.js'%}"></script>
+		<script type="text/javascript">
+			function draw_chart(){
+			var context = document.getElementById("myChart").getContext("2d");
+			var data = [];
+				{%for choice in poll.choice_set.all%}
+					data.push({
+						value : {{choice.votes}},
+						color : "{%random_color%}"
+					});
+				{%endfor%}
+			var myChart = new Chart(context).Pie(data);
 			}
+			window.onload = function(){
+				draw_chart();
+			};
 		</script>
 	</head>
 
@@ -68,19 +78,17 @@
 												</tr>
 											{%endfor%}
 										</tbody>
-										<tfoot>
-											<tr>
-												<td colspan="3">
-													<a href="{%url 'polls:index'%}" class="btn btn-danger">Back to home page</a>
-												</td>
-											</tr>
-										</tfoot>
 									</table>
 								</div>
 							</div>
 							<div class="row graphic">
-								<div class="cold-md-12">
+								<div class="col-md-12">
 									<canvas id="myChart"></canvas>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<a href="{%url 'polls:index'%}" class="btn btn-danger">Back to home page</a>
 								</div>
 							</div>
 						</div>
